@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load your data
-df = pd.read_csv('FireData.csv')
+df = pd.read_csv('FireData23.csv')
 
 # Group by general cause
 cause_counts = df['GeneralCause'].value_counts()

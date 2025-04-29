@@ -1,13 +1,14 @@
-import pandas as pd
-import plotly.express as px
 
-import folium 
+import folium
 from folium.plugins import HeatMap
+import pandas as pd
 
-df = pd.read_csv("FireData.csv")
+df = pd.read_csv("FireData23.csv", low_memory=False)
+df = df.dropna(subset=['Latitude', 'Longitude'])
 
-fig  = px.density_mapbox(df, lat = "Lat_DD", lon = "Long_DD", z = "EstTotalAcres", radius = 20, 
-                         center=dict(lat=df.Lat_DD.mean(), lon = df.Long_DD.mean()),
-                         zoom = 5.75, mapbox_style = 'open-street-map', height=900)
+m = folium.Map(location=[df['Latitude'].mean(), df['Longitude'].mean()], zoom_start=6)
 
-fig.show()
+heat_data = [[row['Latitude'], row['Longitude']] for index, row in df.iterrows()]
+HeatMap(heat_data, radius=10).add_to(m)
+
+m.save('fire_heatmap.html')
