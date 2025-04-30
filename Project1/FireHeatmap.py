@@ -2,18 +2,14 @@ import folium
 from folium.plugins import HeatMap
 import pandas as pd
 
-# Load and filter data
 df = pd.read_csv("FireData23.csv", low_memory=False)
 df = df.dropna(subset=['Latitude', 'Longitude'])
 
-# Initialize the map
 m = folium.Map(location=[df['Latitude'].mean(), df['Longitude'].mean()], zoom_start=6)
 
-# Add heatmap
 heat_data = [[row['Latitude'], row['Longitude']] for index, row in df.iterrows()]
 HeatMap(heat_data, radius=10).add_to(m)
 
-# Add custom legend HTML
 legend_html = '''
      <div style="position: fixed; 
                  bottom: 50px; left: 50px; width: 150px; height: 180px; 
@@ -27,5 +23,4 @@ legend_html = '''
 
 m.get_root().html.add_child(folium.Element(legend_html))
 
-# Save to file
 m.save('fire_heatmap.html')
